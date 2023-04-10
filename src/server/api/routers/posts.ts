@@ -6,9 +6,21 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 const filterUserForClient = (user: User) => {
+  let username = "";
+  if (user.username) {
+    username = user.username;
+  } else if (user.firstName && user.lastName) {
+    username = `${user.firstName} ${user.lastName}`;
+  } else {
+    throw new TRPCError({
+      code: "INTERNAL_SERVER_ERROR",
+      message: "User has no username or name",
+    });
+  }
+
   return {
     id: user.id,
-    username: user.firstName + " " + user.lastName || user.username,
+    username: username,
     profileImageUrl: user.profileImageUrl,
   };
 };
@@ -25,7 +37,7 @@ export const postsRouter = createTRPCRouter({
     ).map(filterUserForClient);
     return posts.map((post) => {
       const author = users.find((user) => user.id === post.authorId);
-      if (!author) {
+      if (!author || !author.username) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Author not found",
