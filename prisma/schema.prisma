@@ -17,7 +17,7 @@ model Post {
     createdAt DateTime @default(now())
     content   String   @db.VarChar(255)
     authorId  String   @db.VarChar(255)
-    image     String   @db.Text
+    image     String?  @db.Text
 
     @@index([authorId])
 }

@@ -8,11 +8,24 @@ import type { RouterOutputs } from "~/utils/api";
 import { api } from "~/utils/api";
 import { LoadingPage } from "~/components/loading";
 import { z } from "zod";
+import { useState } from "react";
 
 dayjs.extend(relativeTime);
 const CreatPostWizard = () => {
   const { user } = useUser();
+  const ctx = api.useContext();
+  const { mutate, isLoading: isPosting } = api.posts.create.useMutation({
+    onSuccess: (data) => {
+      console.log(data);
+      setInput("");
+      void ctx.posts.getAll.invalidate();
+    }
+
+  });
+  const [input, setInput] = useState("");
   if (!user) return null;
+
+
   return (
     <div className="flex w-full gap-3">
       <Image
@@ -25,7 +38,11 @@ const CreatPostWizard = () => {
       <input
         placeholder="Enter a text"
         className="grow bg-transparent outline-none"
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        disabled={isPosting}
       />
+      <button onClick={() => mutate({ content: input })}>Post</button>
     </div>
   );
 };
