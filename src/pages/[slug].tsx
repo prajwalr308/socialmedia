@@ -123,25 +123,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex h-screen justify-center">
-        <div className="w-full border-x border-slate-400 md:max-w-2xl">
-          <div className="flex border-b border-slate-400 p-4">
-            {!isSignedIn && (
-              <div className="flex justify-center">
-                <SignInButton mode="modal">
-                  <button className="btn">Sign in</button>
-                </SignInButton>
-              </div>
-            )}
-            {isSignedIn && (
-              <div className="flex w-full justify-between">
-                <CreatPostWizard />
-                <SignOutButton />
-              </div>
-            )}
-            <SignIn path="/sign-in" routing="path" signUpUrl="/sign-up" />
-          </div>
-          <Feed />
-        </div>
+        <div>profile view</div>
       </main>
     </>
   );
