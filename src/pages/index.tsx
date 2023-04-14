@@ -10,6 +10,7 @@ import { LoadingPage, LoadingSpinner } from "~/components/loading";
 import { z } from "zod";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
+import Link from "next/link";
 
 dayjs.extend(relativeTime);
 const CreatPostWizard = () => {
@@ -84,10 +85,14 @@ const PostView = (props: PostWithUser) => {
       />
       <div className="flex flex-col">
         <div className="flex gap-1 text-slate-300">
-          <span>{author.username}</span>
+          <Link href={`/@${author.username}`}>
+            <span>{author.username}</span>
+          </Link>
           <span>{`· ${dayjs(post.createdAt).fromNow()}`}</span>
         </div>
-        <span>{post.content}</span>
+        <Link href={`/post/${post.id}`}>
+          <span>{post.content}</span>
+        </Link>
       </div>
     </div>
   );
